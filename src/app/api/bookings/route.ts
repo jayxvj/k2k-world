@@ -109,36 +109,14 @@ export async function POST(request: NextRequest) {
       </html>
     `;
 
-    // Send emails in parallel
-    const emailPromises = [
-      // Email to customer (not included in data, so we'll skip it for now)
-      // transporter.sendMail({
-      //   from: `"K to K World" <${process.env.EMAIL_USER}>`,
-      //   to: data.email, // Customer needs to provide email
-      //   subject: 'Booking Request Received - K to K World',
-      //   html: customerEmailHTML,
-      // }),
-      
-      // Email to admin
-      transporter.sendMail({
-        from: `"K to K World Bookings" <${process.env.EMAIL_USER}>`,
-        to: 'jayeshvjadhav23@gmail.com',
-        subject: `New Booking Request - ${data.destination}`,
-        html: adminEmailHTML,
-        replyTo: data.phone,
-      }),
-      
-      // Email to secondary admin
-      transporter.sendMail({
-        from: `"K to K World Bookings" <${process.env.EMAIL_USER}>`,
-        to: 'ktoktourism@gmail.com',
-        subject: `New Booking Request - ${data.destination}`,
-        html: adminEmailHTML,
-        replyTo: data.phone,
-      }),
-    ];
-
-    await Promise.allSettled(emailPromises);
+    // Send email to admin only (ktoktourism@gmail.com)
+    await transporter.sendMail({
+      from: `"K to K World Bookings" <${process.env.EMAIL_USER}>`,
+      to: 'ktoktourism@gmail.com',
+      subject: `New Booking Request - ${data.destination}`,
+      html: adminEmailHTML,
+      replyTo: data.phone,
+    });
 
     return NextResponse.json({ 
       success: true, 

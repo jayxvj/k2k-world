@@ -92,10 +92,10 @@ export async function sendCustomRequestEmail(data: CustomRequestEmailData) {
     </html>
   `;
 
-  // Send to company emails
+  // Send to company email (ktoktourism@gmail.com only)
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
-    to: 'jayeshvjadhav23@gmail.com, ktoktourism@gmail.com',
+    to: 'ktoktourism@gmail.com',
     subject: `New Custom Trip Request - ${data.destination}`,
     html: htmlContent,
   });
@@ -194,10 +194,10 @@ export async function sendContactEmail(data: ContactEmailData) {
     </html>
   `;
 
-  // Send to company emails
+  // Send to company email (ktoktourism@gmail.com only)
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
-    to: 'jayeshvjadhav23@gmail.com, ktoktourism@gmail.com',
+    to: 'ktoktourism@gmail.com',
     subject: `Contact Form: ${data.subject}`,
     html: htmlContent,
   });
