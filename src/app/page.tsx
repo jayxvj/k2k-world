@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Users, Award, Star, ArrowRight } from "lucide-react";
+import { MapPin, Users, Award, Star, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DestinationCard from "@/components/DestinationCard";
+import { SearchWithSuggestions } from "@/components/SearchWithSuggestions";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Destination } from "@/lib/types";
 import Link from "next/link";
@@ -15,15 +15,15 @@ import Link from "next/link";
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchDestinations() {
       try {
-        const response = await fetch("/api/destinations?featured=true");
+        const response = await fetch("/api/destinations?homepage=true");
         const data = await response.json();
         if (data.success) {
-          setDestinations(data.data);
+          // Limit to 10 destinations for homepage
+          setDestinations(data.data.slice(0, 10));
         }
       } catch (error) {
         console.error("Error fetching destinations:", error);
@@ -39,17 +39,19 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
       <Navbar />
 
-      {/* Hero Section */}
+      {/* Hero Section with Video */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-16">
-        {/* Background Image with Overlay */}
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1609920658906-8223bd289001?w=1600')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
+        {/* Background Video with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/afe7457d-4638-41f5-a1f5-454c167ada4a/generated_videos/cinematic-aerial-drone-footage-showcasin-a8f2d6aa-20251128053107.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-blue-900/70 to-pink-900/80" />
         </div>
 
@@ -70,28 +72,14 @@ export default function Home() {
               Experience the magic of travel with K to K World. We create unforgettable journeys across India's most stunning destinations.
             </p>
 
-            {/* Search Bar */}
+            {/* Search Bar with Suggestions */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
               className="max-w-2xl mx-auto mb-8"
             >
-              <div className="relative bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20">
-                <div className="flex items-center gap-2">
-                  <Search className="w-6 h-6 text-white ml-4" />
-                  <Input
-                    type="text"
-                    placeholder="Where do you want to go?"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 bg-transparent border-0 text-white placeholder:text-gray-300 focus-visible:ring-0"
-                  />
-                  <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-full px-8">
-                    Search
-                  </Button>
-                </div>
-              </div>
+              <SearchWithSuggestions />
             </motion.div>
 
             {/* CTA Buttons */}

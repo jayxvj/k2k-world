@@ -5,8 +5,15 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const featured = searchParams.get('featured') === 'true';
+    const homepage = searchParams.get('homepage') === 'true';
     
-    const destinations = await getDestinations(featured);
+    let destinations = await getDestinations(featured);
+    
+    // Filter for homepage if requested
+    if (homepage) {
+      destinations = destinations.filter(dest => dest.showOnHomepage !== false);
+    }
+    
     return NextResponse.json({ success: true, data: destinations });
   } catch (error) {
     console.error('Error fetching destinations:', error);

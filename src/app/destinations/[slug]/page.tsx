@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Clock, MapPin, Star, Check, X, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { BookingModal } from "@/components/BookingModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,6 +20,7 @@ export default function DestinationDetailPage() {
   const [destination, setDestination] = useState<Destination | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchDestination() {
@@ -283,12 +285,13 @@ export default function DestinationDetailPage() {
                     </div>
 
                     <div className="space-y-3">
-                      <Link href={`/custom-trip?destination=${destination.name}`}>
-                        <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
-                          <Calendar className="w-5 h-5 mr-2" />
-                          Book This Trip
-                        </Button>
-                      </Link>
+                      <Button 
+                        onClick={() => setIsBookingModalOpen(true)}
+                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                      >
+                        <Calendar className="w-5 h-5 mr-2" />
+                        Book This Trip
+                      </Button>
                       <Link href="/contact">
                         <Button variant="outline" className="w-full">
                           Contact Us
@@ -310,6 +313,13 @@ export default function DestinationDetailPage() {
       </div>
 
       <Footer />
+      
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        destinationName={destination.name}
+      />
     </div>
   );
 }

@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DestinationCard from "@/components/DestinationCard";
-import { Input } from "@/components/ui/input";
+import { SearchWithSuggestions } from "@/components/SearchWithSuggestions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Destination } from "@/lib/types";
 
@@ -21,7 +20,8 @@ export default function DestinationsPage() {
         const response = await fetch("/api/destinations");
         const data = await response.json();
         if (data.success) {
-          setDestinations(data.data);
+          // Limit to 10 destinations
+          setDestinations(data.data.slice(0, 10));
         }
       } catch (error) {
         console.error("Error fetching destinations:", error);
@@ -57,20 +57,9 @@ export default function DestinationsPage() {
               Discover breathtaking places across India and create unforgettable memories
             </p>
 
-            {/* Search Bar */}
+            {/* Search Bar with Suggestions */}
             <div className="max-w-2xl mx-auto">
-              <div className="relative bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20">
-                <div className="flex items-center gap-2">
-                  <Search className="w-6 h-6 text-white ml-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search destinations..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 bg-transparent border-0 text-white placeholder:text-gray-300 focus-visible:ring-0"
-                  />
-                </div>
-              </div>
+              <SearchWithSuggestions onSearch={setSearchQuery} />
             </div>
           </motion.div>
         </div>

@@ -11,6 +11,7 @@ export interface Destination {
   inclusions: string[];
   exclusions: string[];
   featured: boolean;
+  showOnHomepage: boolean;
   rating: number;
   shortDescription: string;
   createdAt: string;

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X, Plane } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
@@ -43,11 +42,6 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/admin/login">
-              <Button variant="outline" size="sm">
-                Admin
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -80,11 +74,6 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link href="/admin/login" onClick={() => setIsOpen(false)}>
-                <Button variant="outline" size="sm" className="w-full">
-                  Admin
-                </Button>
-              </Link>
             </div>
           </motion.div>
         )}
